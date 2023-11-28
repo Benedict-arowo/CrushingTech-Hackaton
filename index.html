@@ -3,24 +3,28 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<title>Shopify</title>
+		<meta name="description" content="Shopify onboarding page." />
+		<link rel="stylesheet" href="app.css" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 			rel="stylesheet" />
-		<link rel="stylesheet" href="app.css" />
 		<script defer src="app.js"></script>
 	</head>
 	<body>
+		<!-- MAIN HEADER -->
 		<header>
-			<a href="/" tabindex="-1">
-				<picture tabindex="0">
-					<img id="logo--mobile"
+			<a href="/" tabindex="0">
+				<picture tabindex="-1">
+					<img id="logo--mobile" width="32px" height="32px"
 					src="https://crushingit.tech/hackathon-assets/shopify-icon.svg"
 					" alt="website's logo for mobile screen">
 					<img
 						id="logo--desktop"
+						width="105px"
+						height="30px"
 						src="https://crushingit.tech/hackathon-assets/shopify-icon-desktop.svg"
 						alt="website's logo for desktop" />
 				</picture>
@@ -52,6 +56,7 @@
 					type="button"
 					aria-haspopup="true"
 					tabindex="0"
+					aria-label="Toggle Alert Popup"
 					aria-expanded="false"
 					id="alert--button">
 					<svg
@@ -71,16 +76,19 @@
 				<button
 					id="info--button"
 					tabindex="0"
+					aria-labelledby="Toggle Info Popup"
 					aria-haspopup="true"
 					aria-expanded="false">
-					<p>Davii Collections</p>
-					<span>DC</span>
+					<p role="presentation">Davii Collections</p>
+					<span role="presentation">DC</span>
 				</button>
 			</div>
 		</header>
 
+		<!-- MAIN PAGE CONTENT -->
 		<main>
-			<div id="alert--popout-component" aria-labelledby="alert--button">
+			<!-- ALERT COMPONENT -->
+			<article id="alert--popout-component" aria-label="alert component">
 				<div class="alert--component--header">
 					<h4>Alerts</h4>
 
@@ -90,6 +98,7 @@
 							height="12"
 							viewBox="0 0 14 10"
 							fill="none"
+							role="menuitem"
 							tabindex="0"
 							xmlns="http://www.w3.org/2000/svg">
 							<path
@@ -107,6 +116,7 @@
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"
+							role="menuitem"
 							viewBox="0 0 14 14"
 							tabindex="0"
 							fill="none">
@@ -122,20 +132,21 @@
 					</div>
 				</div>
 				<p>Alerts about your store and account will show here</p>
-			</div>
+			</article>
 
-			<div
+			<!-- USER INFO COMPONENT -->
+			<article
 				role="menu"
-				aria-labelledby="info--button"
+				aria-label="user information component"
 				id="info--popout-component">
-				<ul>
+				<ul role="presentation">
 					<a
 						tabindex="0"
 						class="remove-padding"
 						role="menuitem"
 						href="https://admin.shopify.com">
 						<li id="user-info">
-							<div>
+							<div role="presentation">
 								<span>DC</span>
 								<p>Davii Collections</p>
 							</div>
@@ -176,9 +187,9 @@
 					</a>
 				</ul>
 
-				<div class="divider"></div>
+				<div class="divider" role="presentation"></div>
 
-				<ul>
+				<ul role="presentation">
 					<a
 						role="menuitem"
 						tabindex="0"
@@ -211,9 +222,9 @@
 					</a>
 				</ul>
 
-				<div class="divider"></div>
+				<div class="divider" role="presentation"></div>
 
-				<ul>
+				<ul role="presentation">
 					<a
 						tabindex="0"
 						id="account-info"
@@ -237,9 +248,11 @@
 						><li>Log out</li>
 					</a>
 				</ul>
-			</div>
-			<div id="trial-callout">
-				<div>
+			</article>
+
+			<!-- CALLOUT COMPONENT -->
+			<article id="trial-callout">
+				<div role="presentation">
 					<p>
 						Extend your trial for $1/month for 3 months on select
 						plans.
@@ -263,12 +276,14 @@
 							fill="#fff" />
 					</svg>
 				</button>
-			</div>
+			</article>
 
+			<!-- SETUP GUIDE COMPONENT -->
 			<section class="setup-guide">
+				<!-- SETUP GUIDE HEADER -->
 				<section class="setup-guide--header">
 					<div>
-						<h1>Setup guide</h1>
+						<h2 role="heading" aria-level="2">Setup guide</h2>
 						<p>
 							Use this personalized guide to get your store up and
 							running.
@@ -281,13 +296,19 @@
 							</p>
 							<div
 								id="progress-bar--container"
-								role="progressbar">
+								role="progressbar"
+								title="Completed setup guide progress bar">
 								<div id="progress-bar"></div>
 							</div>
 						</div>
 					</div>
 
-					<button id="setup-guide-button" tabindex="0">
+					<button
+						id="setup-guide-button"
+						tabindex="0"
+						aria-label="Toggle setup guides"
+						aria-haspopup="true"
+						aria-expanded="false">
 						<svg
 							width="24"
 							height="24"
@@ -321,31 +342,61 @@
 					</button>
 				</section>
 
-				<section id="setup-guide--guides" data-state="hidden">
+				<!-- SETUP GUIDE GUIDES -->
+				<section id="setup-guide--guides" data-state="expanded">
 					<article
-						data-state="closed"
+						data-state="extended"
 						data-id="1"
-						class="setup--guide--item">
+						aria-haspopup="true"
+						aria-expanded="true"
+						class="setup--guide--item setupguide--menu--opened">
 						<section>
 							<header>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									tabindex="0"
+								<div
+									class="svg--container"
+									aria-checked="false"
 									data-state="pending"
-									fill="none">
-									<circle
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="#8A8A8A"
-										stroke-width="2.08333"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-dasharray="5 5" />
-								</svg>
+									data-id="1"
+									aria-label="toggle complete setup step"
+									role="checkbox"
+									tabindex="0">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										data-state="pending"
+										role="presentation"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-dasharray="5 5" />
+									</svg>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										role="presentation"
+										data-state="hover"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round" />
+									</svg>
+								</div>
 
 								<h3 tabindex="0">
 									Customize your online store
@@ -355,7 +406,10 @@
 								<p>
 									Choose a theme and add your logo, colors,
 									and images to reflect your brand.
-									<a href="">Learn more</a>
+									<a
+										href="https://help.shopify.com/en/manual/online-store/themes/customizing-themes"
+										>Learn more</a
+									>
 								</p>
 
 								<div class="button--container">
@@ -372,34 +426,66 @@
 					<article
 						data-state="closed"
 						data-id="2"
+						aria-haspopup="true"
+						aria-expanded="false"
 						class="setup--guide--item">
 						<section>
 							<header>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
+								<div
+									class="svg--container"
+									aria-checked="false"
 									data-state="pending"
-									tabindex="0"
-									fill="none">
-									<circle
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="#8A8A8A"
-										stroke-width="2.08333"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-dasharray="5 5" />
-								</svg>
+									data-id="2"
+									aria-label="toggle complete setup step"
+									role="checkbox"
+									tabindex="0">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										role="presentation"
+										viewBox="0 0 24 24"
+										data-state="pending"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-dasharray="5 5" />
+									</svg>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										data-state="hover"
+										role="presentation"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round" />
+									</svg>
+								</div>
 								<h3 tabindex="0">Add your first product</h3>
 							</header>
 							<article>
 								<p>
 									Write a description, add photos, and set
 									pricing for the products you plan to sell.
-									<a href="">Learn more</a>
+									<a
+										href="https://help.shopify.com/en/manual/products/add-update-products"
+										>Learn more</a
+									>
 								</p>
 
 								<div class="button--container">
@@ -419,27 +505,56 @@
 					<article
 						data-state="closed"
 						data-id="3"
+						aria-haspopup="true"
+						aria-expanded="false"
 						class="setup--guide--item">
 						<section>
 							<header>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
+								<div
+									class="svg--container"
+									aria-checked="false"
 									data-state="pending"
-									tabindex="0"
-									fill="none">
-									<circle
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="#8A8A8A"
-										stroke-width="2.08333"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-dasharray="5 5" />
-								</svg>
+									data-id="3"
+									aria-label="toggle complete setup step"
+									role="checkbox"
+									tabindex="0">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										role="presentation"
+										viewBox="0 0 24 24"
+										data-state="pending"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-dasharray="5 5" />
+									</svg>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										role="presentation"
+										data-state="hover"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round" />
+									</svg>
+								</div>
 								<h3 tabindex="0">Add a custom domain</h3>
 							</header>
 							<article>
@@ -447,7 +562,10 @@
 									Your current domain is 222219.myshopify.com
 									but you can add a custom domain to help
 									customers find your online store.
-									<a href="">Learn more</a>
+									<a
+										href="https://help.shopify.com/en/manual/domains"
+										>Learn more</a
+									>
 								</p>
 
 								<div class="button--container">
@@ -464,27 +582,56 @@
 					<article
 						data-state="closed"
 						data-id="4"
+						aria-haspopup="true"
+						aria-expanded="false"
 						class="setup--guide--item">
 						<section>
 							<header>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
+								<div
+									class="svg--container"
+									aria-checked="false"
 									data-state="pending"
-									fill="none"
+									data-id="4"
+									aria-label="toggle complete setup step"
+									role="checkbox"
 									tabindex="0">
-									<circle
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="#8A8A8A"
-										stroke-width="2.08333"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-dasharray="5 5" />
-								</svg>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										role="presentation"
+										data-state="pending"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-dasharray="5 5" />
+									</svg>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										role="presentation"
+										viewBox="0 0 24 24"
+										data-state="hover"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round" />
+									</svg>
+								</div>
 								<h3 tabindex="0">Name your store</h3>
 							</header>
 							<article>
@@ -493,7 +640,10 @@
 									collections. The store name appears in your
 									admin and your online store.
 								</p>
-								<a href="">Learn more</a>
+								<a
+									href="https://help.shopify.com/en/manual/intro-to-shopify/initial-setup/setup-business-settings#set-or-change-your-online-store-name-and-legal-business-name"
+									>Learn more</a
+								>
 
 								<div class="button--container">
 									<button>Name store</button>
@@ -509,27 +659,55 @@
 					<article
 						data-state="closed"
 						data-id="5"
+						aria-haspopup="true"
+						aria-expanded="false"
 						class="setup--guide--item">
 						<section>
 							<header>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									tabindex="0"
+								<div
+									class="svg--container"
+									aria-checked="false"
 									data-state="pending"
-									fill="none">
-									<circle
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="#8A8A8A"
-										stroke-width="2.08333"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-dasharray="5 5" />
-								</svg>
+									data-id="5"
+									aria-label="toggle complete setup step"
+									role="checkbox"
+									tabindex="0">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										role="presentation"
+										data-state="pending"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-dasharray="5 5" />
+									</svg>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										role="presentation"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										data-state="hover"
+										fill="none">
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="#8A8A8A"
+											stroke-width="2.08333"
+											stroke-linecap="round"
+											stroke-linejoin="round" />
+									</svg>
+								</div>
 								<h3 tabindex="0">Setup a payment provider</h3>
 							</header>
 							<article>
@@ -539,7 +717,10 @@
 									with the payment provider and set it up with
 									your Shopify store.
 								</p>
-								<a href="">Learn more</a>
+								<a
+									href="https://help.shopify.com/en/manual/payments"
+									>Learn more</a
+								>
 
 								<div class="button--container">
 									<button>Set up payment</button>
@@ -555,6 +736,7 @@
 			</section>
 		</main>
 	</body>
+
 	<script>
 		// SVG's for javascript
 		const pendingSvg = `<svg
@@ -585,8 +767,8 @@
 									fill="#fff"></path>
 							</svg>`;
 
-		const hideSetupGuideSvg = ``;
-
-		const showSetupGuideSvg = ``;
+		const loadingSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M22.0004 12C22.0004 13.9778 21.4139 15.9112 20.3151 17.5557C19.2162 19.2002 17.6545 20.4819 15.8272 21.2388C13.9999 21.9957 11.9893 22.1937 10.0495 21.8079C8.10965 21.422 6.32782 20.4696 4.9293 19.0711C3.53077 17.6725 2.57837 15.8907 2.19251 13.9509C1.80666 12.0111 2.00469 10.0004 2.76157 8.17317C3.51845 6.3459 4.80017 4.78412 6.44466 3.6853C8.08916 2.58649 10.0226 2 12.0004 2" stroke="#1C181D" stroke-width="2.08333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
 	</script>
 </html>

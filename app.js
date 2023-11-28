@@ -12,7 +12,7 @@ const setupGuideItems = document.getElementsByClassName("setup--guide--item");
 const setupGuideButton = document.getElementById("setup-guide-button");
 
 const setupGuideCompletionButton = document.querySelectorAll(
-	"#setup-guide--guides>article[data-id]"
+	"#setup-guide--guides>article div.svg--container"
 );
 const showSetupGuideButton = document.getElementById("show-setupGuide");
 const hideSetupGuideButton = document.getElementById("hide-setupGuide");
@@ -30,11 +30,14 @@ const alertItems = document.getElementById(
 const closeAllDropdown = () => {
 	Array.from(setupGuideItems).forEach((item) => {
 		item.classList.remove("setupguide--menu--opened");
+		item.setAttribute("aria-expanded", "false");
 		item.dataset.state = "closed";
 	});
 };
 
 const openDropdown = (item) => {
+	closeAllDropdown();
+	item.setAttribute("aria-expanded", "true");
 	item.classList.add("setupguide--menu--opened");
 	item.style.opacity = "0";
 	item.dataset.state = "opened";
@@ -42,52 +45,72 @@ const openDropdown = (item) => {
 };
 
 const handleCompleteTask = (e) => {
-	const item = e.currentTarget;
-	const svgElement = item.querySelector("svg");
-	if (e.target.tagName === "svg" || e.target.tagName === "circle") {
-		if (svgElement.dataset.state !== "completed") {
-			svgElement.innerHTML = completedSvg;
-			svgElement.dataset.state = "completed";
+	const itemId = e.currentTarget.dataset.id;
+	const item = document.querySelector(`article[data-id="${itemId}"]`);
+
+	const svgContainer = item.querySelector("div.svg--container");
+
+	if (
+		e.target.tagName === "svg" ||
+		e.target.tagName === "circle" ||
+		(e.target.tagName === "DIV" &&
+			e.target.classList.contains("svg--container"))
+	) {
+		if (svgContainer.dataset.state !== "completed") {
+			svgContainer.children[0].outerHTML = loadingSvg;
+			svgContainer.setAttribute("aria-checked", true);
+			svgContainer.dataset.state = "completed";
 			totalCompleted++;
-			closeAllDropdown();
+			setTimeout(() => {
+				svgContainer.children[0].outerHTML = completedSvg;
+			}, 300);
+
 			let id = 0;
 			// Loops through the setup guide tasks and opens the next one that hasn't been completed yet, and if there aren't any, it doesn't open anything.
 			// Maximum number of times it can loop is the total number of items that exists to prevent infinite recursion.
 			while (id <= totalAmountOfItems) {
-				if (id >= totalAmountOfItems) break;
-
-				let nextItem = setupGuideContainer.querySelector(
-					`[data-id='${Number(id) + 1}']`
-				);
-
-				let svgElement = nextItem.querySelector("svg");
-				if (!(svgElement.dataset.state === "completed")) {
-					openDropdown(nextItem);
-					nextItem.querySelector("header>svg").focus();
+				if (id >= totalAmountOfItems) {
+					closeAllDropdown();
 					break;
 				}
 
-				id = Number(id) + 1;
+				let nextItem = setupGuideContainer.querySelector(
+					`article[data-id='${Number(id) + 1}']`
+				);
+
+				let svgContainer = nextItem.querySelector("div.svg--container");
+
+				if (svgContainer.dataset.state === "pending") {
+					openDropdown(nextItem);
+					svgContainer.focus();
+					break;
+				}
+
+				id = id + 1;
 			}
 		} else {
-			svgElement.dataset.state = "pending";
+			svgContainer.dataset.state = "pending";
+			svgContainer.setAttribute("aria-checked", false);
 			totalCompleted--;
-			svgElement.innerHTML = pendingSvg;
+			svgContainer.children[0].outerHTML = pendingSvg;
 		}
 
-		// Upgrading the progress bar, and the amount completed elements
+		// Updating the progress bar, and the amount completed elements
 		amountCompleted.innerText = totalCompleted;
 		progressBar.style.width = `${
 			(totalCompleted / totalAmountOfItems) * 100
 		}%`;
 	}
 };
+
 // Handles everything about the completion of tasks
 Array.from(setupGuideCompletionButton).forEach((button) => {
 	button.addEventListener("click", (e) => {
 		handleCompleteTask(e);
 	});
+
 	button.addEventListener("keydown", (e) => {
+		// console.log(button);
 		if (e.key === "Escape") {
 			toggleSetupGuideDisplay();
 			showSetupGuideButton.parentElement.focus();
@@ -98,21 +121,24 @@ Array.from(setupGuideCompletionButton).forEach((button) => {
 
 const handleOpenSetupGuide = (e) => {
 	const selectedItem = e.currentTarget;
-
 	// Stops the menu from opening up when the user completes/uncompletes it.
+	console.log(e.target.tagName);
 	if (
 		e.target.tagName === "svg" ||
 		e.target.tagName === "path" ||
-		e.target.tagName === "circle"
+		e.target.tagName === "circle" ||
+		(e.target.tagName === "DIV" &&
+			e.target.classList.contains("svg--container"))
 	)
 		return;
+
 	// If the selected guide is already being displayed, then just ignore.
 	if (selectedItem.dataset.state === "opened") return;
 	else {
-		closeAllDropdown();
 		openDropdown(selectedItem);
 	}
 };
+
 // Handles opening of a setup guide
 Array.from(setupGuideItems).forEach((item) => {
 	item.addEventListener("click", (e) => {
@@ -124,29 +150,40 @@ Array.from(setupGuideItems).forEach((item) => {
 	});
 });
 
+const expandSetupGuide = () => {
+	setupGuideContainer.setAttribute("data-state", "expanded");
+	setupGuideButton.setAttribute("aria-expanded", true);
+
+	hideSetupGuideButton.style.display = "none";
+	showSetupGuideButton.style.display = "block";
+	setupGuideContainer.style.opacity = "0";
+	setupGuideContainer.style.display = "flex";
+	const firstSetupGuide = setupGuideItems[0].querySelector("svg");
+	firstSetupGuide.setAttribute("tabindex", 0);
+	firstSetupGuide.focus();
+
+	setTimeout(() => {
+		setupGuideContainer.style.opacity = "1";
+	}, 100);
+};
+
+const hideSetupGuide = () => {
+	setupGuideContainer.setAttribute("data-state", "hidden");
+	setupGuideButton.setAttribute("aria-expanded", false);
+
+	setupGuideContainer.style.opacity = "0";
+	setupGuideContainer.style.display = "none";
+	hideSetupGuideButton.style.display = "block";
+	showSetupGuideButton.style.display = "none";
+	showSetupGuideButton.parentElement.focus();
+};
+
 const toggleSetupGuideDisplay = () => {
 	const currentState = setupGuideContainer.dataset.state;
-
 	if (currentState === "expanded") {
-		setupGuideContainer.setAttribute("data-state", "hidden");
-		hideSetupGuideButton.style.display = "none";
-		showSetupGuideButton.style.display = "block";
-		setupGuideContainer.style.opacity = "0";
-		setupGuideContainer.style.display = "flex";
-		const firstSetupGuide = setupGuideItems[0].querySelector("svg");
-		firstSetupGuide.setAttribute("tabindex", 0);
-		firstSetupGuide.focus();
-
-		setTimeout(() => {
-			setupGuideContainer.style.opacity = "1";
-		}, 100);
+		hideSetupGuide();
 	} else {
-		setupGuideContainer.setAttribute("data-state", "expanded");
-		setupGuideContainer.style.opacity = "0";
-		setupGuideContainer.style.display = "none";
-		hideSetupGuideButton.style.display = "block";
-		showSetupGuideButton.style.display = "none";
-		showSetupGuideButton.parentElement.focus();
+		expandSetupGuide();
 	}
 };
 
@@ -159,8 +196,6 @@ setupGuideButton.addEventListener("keydown", (e) => {
 });
 
 let activeNavComponent = null;
-
-// searchComponent.addEventListener("keydown", )
 
 const toggleAlertButton = () => {
 	if (activeNavComponent == "info") {
@@ -235,7 +270,7 @@ dismissButton.addEventListener("click", () => {
 	trialCalloutComponent.querySelector("button").setAttribute("tabIndex", -1);
 });
 
-infoButton.addEventListener("click", (e) => toggleInfoButton(e));
+infoButton.addEventListener("click", (e) => toggleInfoButton());
 infoButton.addEventListener("keydown", (e) => {
 	if (e.key === "Enter" || e.key === " ") {
 		toggleInfoButton();
@@ -258,8 +293,4 @@ Array.from(alertItems).forEach((item) => {
 			alertButton.focus();
 		}
 	});
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-	toggleSetupGuideDisplay();
 });
